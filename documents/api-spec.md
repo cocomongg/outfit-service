@@ -170,7 +170,7 @@
 **설명**: 카테고리 이름으로 최저, 최고 가격 브랜드와 상품 가격을 조회한다.
 
 **API 기본 정보**
-- **URI**: `/api/v1/categories/price-range`
+- **URI**: `/api/v1/categories/extreme-prices`
 - **Http Method**: `GET`
 
 **Request(요청 데이터)**
@@ -460,7 +460,6 @@
 ```
 
 **Response(응답 데이터)**
-**Response**
 - 성공 응답(http status: 201 Created)
 ```json
 {
@@ -471,6 +470,13 @@
   "data": {
     "goodsId": 1
   }
+}
+```
+- 실패 - 유효하지 않은 입력값(http status: 400 Bad Request)
+```json
+{
+  "code": "INVALID_REQUEST",
+  "message": "유효하지 않은 값입니다."
 }
 ```
 <br/>
