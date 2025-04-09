@@ -1,4 +1,4 @@
-package com.musinsa.snap.outfit.infrastructure.goods;
+package com.musinsa.snap.outfit.infrastructure.db.goods;
 
 import com.musinsa.snap.outfit.domain.goods.model.Goods;
 import java.util.Optional;

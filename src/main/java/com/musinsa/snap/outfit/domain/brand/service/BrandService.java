@@ -7,7 +7,7 @@ import com.musinsa.snap.outfit.domain.brand.dto.UpdateBrandCommand;
 import com.musinsa.snap.outfit.domain.brand.error.BrandErrorCode;
 import com.musinsa.snap.outfit.domain.brand.model.Brand;
 import com.musinsa.snap.outfit.domain.brand.repository.BrandRepository;
-import com.musinsa.snap.outfit.domain.common.PageResult;
+import com.musinsa.snap.outfit.domain.common.model.PageResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

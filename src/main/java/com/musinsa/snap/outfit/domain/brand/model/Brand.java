@@ -1,6 +1,6 @@
 package com.musinsa.snap.outfit.domain.brand.model;
 
-import com.musinsa.snap.outfit.domain.common.BaseEntity;
+import com.musinsa.snap.outfit.domain.common.model.BaseEntity;
 import com.musinsa.snap.outfit.domain.brand.dto.CreateBrandCommand;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

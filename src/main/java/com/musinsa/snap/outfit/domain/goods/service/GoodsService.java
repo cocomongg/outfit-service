@@ -1,7 +1,7 @@
 package com.musinsa.snap.outfit.domain.goods.service;
 
 import com.musinsa.snap.outfit.common.error.CoreException;
-import com.musinsa.snap.outfit.domain.common.PageResult;
+import com.musinsa.snap.outfit.domain.common.model.PageResult;
 import com.musinsa.snap.outfit.domain.goods.dto.CreateGoodsCommand;
 import com.musinsa.snap.outfit.domain.goods.dto.GetGoodsListQuery;
 import com.musinsa.snap.outfit.domain.goods.dto.UpdateGoodsCommand;

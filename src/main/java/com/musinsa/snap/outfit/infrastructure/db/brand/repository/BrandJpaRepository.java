@@ -1,4 +1,4 @@
-package com.musinsa.snap.outfit.infrastructure.brand.repository;
+package com.musinsa.snap.outfit.infrastructure.db.brand.repository;
 
 import com.musinsa.snap.outfit.domain.brand.model.Brand;
 import java.util.Optional;

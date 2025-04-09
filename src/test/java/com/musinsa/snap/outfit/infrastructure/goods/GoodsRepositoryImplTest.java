@@ -3,11 +3,14 @@ package com.musinsa.snap.outfit.infrastructure.goods;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.musinsa.snap.outfit.config.JPAConfig;
-import com.musinsa.snap.outfit.domain.common.PageResult;
+import com.musinsa.snap.outfit.domain.common.model.PageResult;
 import com.musinsa.snap.outfit.domain.goods.dto.CreateGoodsCommand;
 import com.musinsa.snap.outfit.domain.goods.dto.GetGoodsListQuery;
 import com.musinsa.snap.outfit.domain.goods.model.Goods;
 import com.musinsa.snap.outfit.domain.goods.repository.GoodsRepository;
+import com.musinsa.snap.outfit.infrastructure.db.goods.GoodsJpaRepository;
+import com.musinsa.snap.outfit.infrastructure.db.goods.GoodsQueryRepository;
+import com.musinsa.snap.outfit.infrastructure.db.goods.GoodsRepositoryImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,6 @@
-package com.musinsa.snap.outfit.infrastructure.goods;
+package com.musinsa.snap.outfit.infrastructure.db.goods;
 
-import com.musinsa.snap.outfit.domain.common.PageResult;
+import com.musinsa.snap.outfit.domain.common.model.PageResult;
 import com.musinsa.snap.outfit.domain.goods.dto.GetGoodsListQuery;
 import com.musinsa.snap.outfit.domain.goods.model.Goods;
 import com.musinsa.snap.outfit.domain.goods.repository.GoodsRepository;

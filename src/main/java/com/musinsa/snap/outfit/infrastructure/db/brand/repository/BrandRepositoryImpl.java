@@ -1,9 +1,9 @@
-package com.musinsa.snap.outfit.infrastructure.brand.repository;
+package com.musinsa.snap.outfit.infrastructure.db.brand.repository;
 
 import com.musinsa.snap.outfit.domain.brand.dto.GetBrandListQuery;
 import com.musinsa.snap.outfit.domain.brand.model.Brand;
 import com.musinsa.snap.outfit.domain.brand.repository.BrandRepository;
-import com.musinsa.snap.outfit.domain.common.PageResult;
+import com.musinsa.snap.outfit.domain.common.model.PageResult;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

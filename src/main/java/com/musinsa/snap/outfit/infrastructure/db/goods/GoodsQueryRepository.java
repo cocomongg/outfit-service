@@ -1,4 +1,4 @@
-package com.musinsa.snap.outfit.infrastructure.goods;
+package com.musinsa.snap.outfit.infrastructure.db.goods;
 
 import static com.musinsa.snap.outfit.domain.goods.model.QGoods.goods;
 

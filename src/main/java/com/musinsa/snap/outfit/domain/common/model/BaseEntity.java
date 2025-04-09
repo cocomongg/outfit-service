@@ -1,4 +1,4 @@
-package com.musinsa.snap.outfit.domain.common;
+package com.musinsa.snap.outfit.domain.common.model;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
