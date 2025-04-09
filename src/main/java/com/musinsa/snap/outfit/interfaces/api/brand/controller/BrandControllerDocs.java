@@ -1,6 +1,7 @@
 package com.musinsa.snap.outfit.interfaces.api.brand.controller;
 
 import com.musinsa.snap.outfit.interfaces.api.brand.dto.BrandRequest.CreateBrandRequest;
+import com.musinsa.snap.outfit.interfaces.api.brand.dto.BrandRequest.GetBrandListRequest;
 import com.musinsa.snap.outfit.interfaces.api.brand.dto.BrandRequest.UpdateBrandRequest;
 import com.musinsa.snap.outfit.interfaces.api.brand.dto.BrandResponse.BrandCreateResponse;
 import com.musinsa.snap.outfit.interfaces.api.brand.dto.BrandResponse.BrandDetailResponse;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
 
 @Tag(name = "브랜드 API", description = "브랜드 관련 API")
 public interface BrandControllerDocs {
@@ -53,9 +55,7 @@ public interface BrandControllerDocs {
                     }
                     """))),
     })
-    ApiSuccessResponse<BrandListResponse> getBrandList(
-        @Parameter(description = "페이지 번호 (0부터 시작)") int pageNo,
-        @Parameter(description = "페이지 크기") int pageSize);
+    ApiSuccessResponse<BrandListResponse> getBrandList(@ParameterObject GetBrandListRequest request);
 
     @Operation(summary = "브랜드 상세 조회", description = "특정 브랜드의 상세 정보를 조회합니다.")
     @ApiResponses(value = {

@@ -40,7 +40,7 @@ public class BrandResponse {
         private final int pageSize;
 
         @Schema(description = "전체 항목 수", example = "60")
-        private final int totalElements;
+        private final Long totalElements;
 
         @Schema(description = "전체 페이지 수", example = "3")
         private final int totalPages;
@@ -75,3 +75,5 @@ public class BrandResponse {
         private final List<GoodsInfo> goodsList;
     }
 }
+
+
