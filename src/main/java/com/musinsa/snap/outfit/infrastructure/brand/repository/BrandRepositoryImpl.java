@@ -12,8 +12,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Repository;
 
-@RequiredArgsConstructor
 @Repository
+@RequiredArgsConstructor
 public class BrandRepositoryImpl implements BrandRepository {
 
     private final BrandJpaRepository brandJpaRepository;

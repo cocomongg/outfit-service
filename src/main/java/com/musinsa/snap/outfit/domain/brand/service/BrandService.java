@@ -30,8 +30,8 @@ public class BrandService {
 
     @Transactional
     public Brand createBrand(CreateBrandCommand command) {
-        Brand brand = new Brand(command);
         this.validateBrandNameNotExists(command.getBrandName());
+        Brand brand = new Brand(command);
         return brandRepository.save(brand);
     }
 
