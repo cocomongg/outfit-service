@@ -7,9 +7,13 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @Builder
 @RequiredArgsConstructor
-public class UpdateGoodsCommand {
+public class GoodsWithBrand {
     private final Long goodsId;
     private final String goodsName;
     private final Long price;
     private final Long quantity;
+    private final Long brandId;
+    private final String brandName;
+    private final Long categoryId;
+    private final boolean deleted;
 }

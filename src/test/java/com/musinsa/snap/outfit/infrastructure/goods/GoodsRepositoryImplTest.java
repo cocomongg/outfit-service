@@ -3,11 +3,15 @@ package com.musinsa.snap.outfit.infrastructure.goods;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.musinsa.snap.outfit.config.JPAConfig;
+import com.musinsa.snap.outfit.domain.brand.dto.CreateBrandCommand;
+import com.musinsa.snap.outfit.domain.brand.model.Brand;
 import com.musinsa.snap.outfit.domain.common.model.PageResult;
 import com.musinsa.snap.outfit.domain.goods.dto.CreateGoodsCommand;
 import com.musinsa.snap.outfit.domain.goods.dto.GetGoodsListQuery;
+import com.musinsa.snap.outfit.domain.goods.dto.GoodsWithBrand;
 import com.musinsa.snap.outfit.domain.goods.model.Goods;
 import com.musinsa.snap.outfit.domain.goods.repository.GoodsRepository;
+import com.musinsa.snap.outfit.infrastructure.db.brand.repository.BrandJpaRepository;
 import com.musinsa.snap.outfit.infrastructure.db.goods.GoodsJpaRepository;
 import com.musinsa.snap.outfit.infrastructure.db.goods.GoodsQueryRepository;
 import com.musinsa.snap.outfit.infrastructure.db.goods.GoodsRepositoryImpl;
@@ -29,6 +33,9 @@ class GoodsRepositoryImplTest {
 
     @Autowired
     private GoodsJpaRepository goodsJpaRepository;
+
+    @Autowired
+    private BrandJpaRepository brandJpaRepository;
 
     @DisplayName("삭제되지 않은 상품ID로 조회 시, ID에 해당하는 상품을 반환한다")
     @Test
@@ -69,18 +76,19 @@ class GoodsRepositoryImplTest {
     @Test
     void should_returnNotDeletedPagedGoodsList_when_byQuery() {
         // given
+        Long brandId = this.createBrand();
+
         List<Goods> existsGoodsList = new ArrayList<>();
         List<Goods> deletedGoodsList = new ArrayList<>();
-
         for (int i = 0; i < 15; i++) {
             CreateGoodsCommand command =
-                new CreateGoodsCommand("name" + i, 1000L, 10L, 1L, 1L);
+                new CreateGoodsCommand("name" + i, 1000L, 10L, brandId, 1L);
             Goods goods = new Goods(command);
             existsGoodsList.add(goods);
         }
         for (int i = 0; i < 5; i++) {
             CreateGoodsCommand command =
-                new CreateGoodsCommand("deleted" + i, 1000L, 10L, 1L, 1L);
+                new CreateGoodsCommand("deleted" + i, 1000L, 10L, brandId, 1L);
             Goods goods = new Goods(command);
             goods.delete();
             deletedGoodsList.add(goods);
@@ -91,7 +99,7 @@ class GoodsRepositoryImplTest {
 
         // when
         GetGoodsListQuery query = new GetGoodsListQuery(0, 10, 1L);
-        PageResult<Goods> result = goodsRepository.getList(query);
+        PageResult<GoodsWithBrand> result = goodsRepository.getList(query);
 
         // then
         assertThat(result.getTotalElements()).isEqualTo(existsGoodsList.size());
@@ -99,8 +107,8 @@ class GoodsRepositoryImplTest {
         assertThat(result.getPageNo()).isEqualTo(query.getPageNo());
         assertThat(result.getPageSize()).isEqualTo(query.getPageSize());
 
-        List<Goods> resultContent = result.getContent();
-        for(Goods goods : resultContent) {
+        List<GoodsWithBrand> resultContent = result.getContent();
+        for(GoodsWithBrand goods : resultContent) {
             assertThat(goods.isDeleted()).isFalse();
             assertThat(goods.getBrandId()).isEqualTo(query.getBrandId());
         }
@@ -110,22 +118,24 @@ class GoodsRepositoryImplTest {
     @Test
     void should_returnSortedPagedGoodsList_when_byQuery() {
         // given
+        Long brandId = this.createBrand();
+
         CreateGoodsCommand command1 =
-            new CreateGoodsCommand("name1", 1000L, 10L, 1L, 1L);
+            new CreateGoodsCommand("name1", 1000L, 10L, brandId, 1L);
         CreateGoodsCommand command2 =
-            new CreateGoodsCommand("name2", 1000L, 10L, 1L, 1L);
+            new CreateGoodsCommand("name2", 1000L, 10L, brandId, 1L);
         CreateGoodsCommand command3 =
-            new CreateGoodsCommand("name1", 1000L, 10L, 1L, 1L);
+            new CreateGoodsCommand("name1", 1000L, 10L, brandId, 1L);
         Goods goods1 = goodsJpaRepository.save(new Goods(command1));
         Goods goods2 = goodsJpaRepository.save(new Goods(command2));
         Goods goods3 = goodsJpaRepository.save(new Goods(command3));
 
         // when
-        GetGoodsListQuery query = new GetGoodsListQuery(0, 10, 1L);
-        PageResult<Goods> result = goodsRepository.getList(query);
+        GetGoodsListQuery query = new GetGoodsListQuery(0, 10, brandId);
+        PageResult<GoodsWithBrand> result = goodsRepository.getList(query);
 
         // then
-        List<Goods> resultContent = result.getContent();
+        List<GoodsWithBrand> resultContent = result.getContent();
         assertThat(resultContent.size()).isEqualTo(3);
         assertThat(resultContent.get(0).getGoodsId()).isEqualTo(goods3.getGoodsId());
         assertThat(resultContent.get(1).getGoodsId()).isEqualTo(goods2.getGoodsId());
@@ -136,10 +146,12 @@ class GoodsRepositoryImplTest {
     @Test
     void should_returnAllPagedGoodsList_when_noBrandId() {
         // given
+        Long brandId = this.createBrand();
+
         List<Goods> existsGoodsList = new ArrayList<>();
         for (int i = 0; i < 15; i++) {
-            CreateGoodsCommand command =
-                new CreateGoodsCommand("name" + i, 1000L, 10L, (long) i, 1L);
+            CreateGoodsCommand command = new CreateGoodsCommand("name" + i, 1000L,
+                10L, brandId, 1L);
             Goods goods = new Goods(command);
             existsGoodsList.add(goods);
         }
@@ -147,14 +159,13 @@ class GoodsRepositoryImplTest {
 
         // when
         GetGoodsListQuery query = new GetGoodsListQuery(0, 10, null);
-        PageResult<Goods> result = goodsRepository.getList(query);
+        PageResult<GoodsWithBrand> result = goodsRepository.getList(query);
 
         // then
         assertThat(result.getTotalElements()).isEqualTo(existsGoodsList.size());
         assertThat(result.getTotalPages()).isEqualTo(existsGoodsList.size() / query.getPageSize() + 1);
         assertThat(result.getPageNo()).isEqualTo(query.getPageNo());
         assertThat(result.getPageSize()).isEqualTo(query.getPageSize());
-        List<Goods> resultContent = result.getContent();
     }
 
     @DisplayName("상품 이름 존재 여부 조회 시, 존재하면 true를 반환한다.")
@@ -226,5 +237,11 @@ class GoodsRepositoryImplTest {
         assertThat(getGoods.getQuantity()).isEqualTo(command.getQuantity());
         assertThat(getGoods.getBrandId()).isEqualTo(command.getBrandId());
         assertThat(getGoods.getCategoryId()).isEqualTo(command.getCategoryId());
+    }
+
+    private Long createBrand() {
+        CreateBrandCommand brandCommand = new CreateBrandCommand("brandName");
+        Brand brand = new Brand(brandCommand);
+        return brandJpaRepository.save(brand).getBrandId();
     }
 }

@@ -4,6 +4,7 @@ import com.musinsa.snap.outfit.common.error.CoreException;
 import com.musinsa.snap.outfit.domain.common.model.PageResult;
 import com.musinsa.snap.outfit.domain.goods.dto.CreateGoodsCommand;
 import com.musinsa.snap.outfit.domain.goods.dto.GetGoodsListQuery;
+import com.musinsa.snap.outfit.domain.goods.dto.GoodsWithBrand;
 import com.musinsa.snap.outfit.domain.goods.dto.UpdateGoodsCommand;
 import com.musinsa.snap.outfit.domain.goods.error.GoodsErrorCode;
 import com.musinsa.snap.outfit.domain.goods.model.Goods;
@@ -25,7 +26,7 @@ public class GoodsService {
     }
 
     @Transactional(readOnly = true)
-    public PageResult<Goods> getGoodsList(GetGoodsListQuery query) {
+    public PageResult<GoodsWithBrand> getGoodsList(GetGoodsListQuery query) {
         return goodsRepository.getList(query);
     }
 
