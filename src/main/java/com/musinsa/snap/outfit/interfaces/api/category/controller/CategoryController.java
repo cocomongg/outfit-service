@@ -1,24 +1,32 @@
 package com.musinsa.snap.outfit.interfaces.api.category.controller;
 
+import com.musinsa.snap.outfit.application.category.dto.GetCategoryExtremePriceResult;
+import com.musinsa.snap.outfit.application.category.usecase.GetCategoryExtremePricesUseCase;
 import com.musinsa.snap.outfit.interfaces.api.brand.dto.BrandResponse.BrandInfo;
 import com.musinsa.snap.outfit.interfaces.api.category.dto.CategoryResponse.CategoriesLowestPriceResponse;
-import com.musinsa.snap.outfit.interfaces.api.category.dto.CategoryResponse.CategoryExtremePriceInfo;
 import com.musinsa.snap.outfit.interfaces.api.category.dto.CategoryResponse.CategoryExtremePricesResponse;
 import com.musinsa.snap.outfit.interfaces.api.category.dto.CategoryResponse.CategoryInfo;
 import com.musinsa.snap.outfit.interfaces.api.category.dto.CategoryResponse.CategoryListResponse;
 import com.musinsa.snap.outfit.interfaces.api.category.dto.CategoryResponse.CategoryLowestPriceInfo;
+import com.musinsa.snap.outfit.interfaces.api.category.mapper.CategoryMapper;
 import com.musinsa.snap.outfit.interfaces.api.common.response.ApiSuccessResponse;
 import com.musinsa.snap.outfit.interfaces.api.goods.dto.GoodsResponse.GoodsInfo;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/categories")
 @RestController
 public class CategoryController implements CategoryControllerDocs{
+
+    private final GetCategoryExtremePricesUseCase getCategoryExtremePricesUseCase;
+
+    private final CategoryMapper categoryMapper;
 
     @Override
     @GetMapping
@@ -49,19 +57,11 @@ public class CategoryController implements CategoryControllerDocs{
     @GetMapping("/extreme-prices")
     public ApiSuccessResponse<CategoryExtremePricesResponse> getCategoryLowestAndHighestPrices(
         @RequestParam String categoryName) {
-        List<CategoryExtremePriceInfo> lowestPrices = new ArrayList<>();
-        GoodsInfo lowGoods = new GoodsInfo(1L, "최저상품", 8000L);
-        BrandInfo lowBrand = new BrandInfo(1L, "A");
-        lowestPrices.add(new CategoryExtremePriceInfo(lowBrand, lowGoods));
+        GetCategoryExtremePriceResult result = getCategoryExtremePricesUseCase.execute(
+            categoryName);
+        CategoryExtremePricesResponse response =
+            categoryMapper.toCategoryExtremePricesResponse(result);
 
-        // 임의의 최고 가격 정보
-        List<CategoryExtremePriceInfo> highestPrices = new ArrayList<>();
-        GoodsInfo highGoods = new GoodsInfo(2L, "최고상품", 20000L);
-        BrandInfo highBrand = new BrandInfo(2L, "B");
-        highestPrices.add(new CategoryExtremePriceInfo(highBrand, highGoods));
-
-        CategoryExtremePricesResponse response = new CategoryExtremePricesResponse(
-            "001", categoryName, lowestPrices, highestPrices);
         return ApiSuccessResponse.OK(response);
     }
 }

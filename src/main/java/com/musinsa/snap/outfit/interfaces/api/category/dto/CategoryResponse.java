@@ -56,8 +56,8 @@ public class CategoryResponse {
     @Getter
     @RequiredArgsConstructor
     public static class CategoryExtremePricesResponse {
-        @Schema(description = "카테고리 코드", example = "001")
-        private final String categoryCode;
+        @Schema(description = "카테고리 ID", example = "1")
+        private final Long categoryId;
 
         @Schema(description = "카테고리 이름", example = "상의")
         private final String categoryName;
