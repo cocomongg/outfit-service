@@ -12,10 +12,3 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-  h2:
-    console:
-      enabled: true
-
-springdoc:
-  default-consumes-media-type: application/json
-  default-produces-media-type: application/json

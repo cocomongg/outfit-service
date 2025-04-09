@@ -1,5 +1,5 @@
 -- 카테고리 테이블
-create table category
+create table categories
 (
     category_id   bigint auto_increment
         primary key,
@@ -14,11 +14,12 @@ create table category
 );
 
 -- 브랜드 테이블
-create table brand
+create table brands
 (
     brand_id   bigint auto_increment
         primary key,
     brand_name varchar(100) not null,
+    is_deleted boolean      not null,
     created_at datetime     not null,
     updated_at datetime     null,
     constraint brand_name_uindex
