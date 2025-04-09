@@ -4,11 +4,13 @@ import com.musinsa.snap.outfit.common.error.CoreException;
 import com.musinsa.snap.outfit.domain.common.model.PageResult;
 import com.musinsa.snap.outfit.domain.goods.dto.CreateGoodsCommand;
 import com.musinsa.snap.outfit.domain.goods.dto.GetGoodsListQuery;
+import com.musinsa.snap.outfit.domain.goods.dto.GoodsPriceInfo;
 import com.musinsa.snap.outfit.domain.goods.dto.GoodsWithBrand;
 import com.musinsa.snap.outfit.domain.goods.dto.UpdateGoodsCommand;
 import com.musinsa.snap.outfit.domain.goods.error.GoodsErrorCode;
 import com.musinsa.snap.outfit.domain.goods.model.Goods;
 import com.musinsa.snap.outfit.domain.goods.repository.GoodsRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,5 +63,10 @@ public class GoodsService {
         if (goodsRepository.existsByGoodsName(goodsName)) {
             throw new CoreException(GoodsErrorCode.GOODS_NAME_ALREADY_EXISTS);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<GoodsPriceInfo> getExtremePriceInfoByCategory(Long categoryId, boolean isLowest) {
+        return goodsRepository.getExtremePriceInfoByCategory(categoryId, isLowest);
     }
 }

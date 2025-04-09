@@ -1,12 +1,16 @@
 package com.musinsa.snap.outfit.infrastructure.db.goods;
 
 import static com.musinsa.snap.outfit.domain.brand.model.QBrand.brand;
+import static com.musinsa.snap.outfit.domain.category.model.QCategory.category;
 import static com.musinsa.snap.outfit.domain.goods.model.QGoods.goods;
 
 import com.musinsa.snap.outfit.domain.goods.dto.GetGoodsListQuery;
 import com.musinsa.snap.outfit.infrastructure.db.goods.dto.GoodsListItemProjection;
+import com.musinsa.snap.outfit.infrastructure.db.goods.dto.GoodsPriceInfoProjection;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -52,6 +56,46 @@ public class GoodsQueryRepository {
         });
     }
 
+    public List<GoodsPriceInfoProjection> getGoodsPriceInfoByCategory(Long categoryId, boolean isLowest) {
+        return queryFactory.select(Projections.constructor(
+            GoodsPriceInfoProjection.class,
+                goods.goodsId,
+                goods.goodsName,
+                goods.price,
+                brand.brandId,
+                brand.brandName,
+                category.categoryId,
+                category.categoryName
+            ))
+            .from(goods)
+            .join(brand).on(goods.brandId.eq(brand.brandId))
+            .join(category).on(goods.categoryId.eq(category.categoryId))
+            .where(
+                this.categoryIdEq(categoryId),
+                this.deletedIsFalse(),
+                this.priceEq(categoryId, isLowest)
+            )
+            .fetch();
+    }
+
+    private Predicate priceEq(Long categoryId, boolean isLowest) {
+        return isLowest ? goods.price.eq(
+            JPAExpressions.select(goods.price.min())
+                .from(goods)
+                .where(
+                    this.categoryIdEq(categoryId),
+                    this.deletedIsFalse()
+                )
+        ) : goods.price.eq(
+            JPAExpressions.select(goods.price.max())
+                .from(goods)
+                .where(
+                    this.categoryIdEq(categoryId),
+                    this.deletedIsFalse()
+                )
+        );
+    }
+
     private JPAQuery<?> generateGoodsListQuery(GetGoodsListQuery query) {
         return queryFactory.from(goods)
             .join(brand).on(goods.brandId.eq(brand.brandId))
@@ -67,5 +111,9 @@ public class GoodsQueryRepository {
 
     private BooleanExpression deletedIsFalse() {
         return goods.deleted.isFalse();
+    }
+
+    private BooleanExpression categoryIdEq(Long categoryId) {
+        return categoryId != null ? goods.categoryId.eq(categoryId) : null;
     }
 }
