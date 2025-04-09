@@ -2,12 +2,15 @@ package com.musinsa.snap.outfit.infrastructure.db.goods;
 
 import com.musinsa.snap.outfit.domain.common.model.PageResult;
 import com.musinsa.snap.outfit.domain.goods.dto.GetGoodsListQuery;
+import com.musinsa.snap.outfit.domain.goods.dto.GoodsPriceInfo;
 import com.musinsa.snap.outfit.domain.goods.dto.GoodsWithBrand;
 import com.musinsa.snap.outfit.domain.goods.model.Goods;
 import com.musinsa.snap.outfit.domain.goods.repository.GoodsRepository;
 import com.musinsa.snap.outfit.infrastructure.db.goods.dto.GoodsListItemProjection;
+import com.musinsa.snap.outfit.infrastructure.db.goods.dto.GoodsPriceInfoProjection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
@@ -59,5 +62,24 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     @Override
     public Goods save(Goods goods) {
         return goodsJpaRepository.save(goods);
+    }
+
+    @Override
+    public List<GoodsPriceInfo> getExtremePriceInfoByCategory(Long categoryId, boolean isLowest) {
+        List<GoodsPriceInfoProjection> projectionList = goodsQueryRepository.getGoodsPriceInfoByCategory(
+            categoryId, isLowest);
+
+        return projectionList.stream()
+            .map(goodsPriceInfoProjection ->
+                GoodsPriceInfo.builder()
+                    .goodsId(goodsPriceInfoProjection.getGoodsId())
+                    .goodsName(goodsPriceInfoProjection.getGoodsName())
+                    .price(goodsPriceInfoProjection.getPrice())
+                    .brandId(goodsPriceInfoProjection.getBrandId())
+                    .brandName(goodsPriceInfoProjection.getBrandName())
+                    .categoryId(goodsPriceInfoProjection.getCategoryId())
+                    .categoryName(goodsPriceInfoProjection.getCategoryName())
+                    .build()
+            ).collect(Collectors.toList());
     }
 }
