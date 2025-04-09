@@ -1,6 +1,7 @@
 package com.musinsa.snap.outfit.interfaces.api.goods.controller;
 
 import com.musinsa.snap.outfit.interfaces.api.common.response.ApiSuccessResponse;
+import com.musinsa.snap.outfit.interfaces.api.goods.dto.GoodsRequest.GetGoodsListRequest;
 import com.musinsa.snap.outfit.interfaces.api.goods.dto.GoodsRequest.GoodsCreateRequest;
 import com.musinsa.snap.outfit.interfaces.api.goods.dto.GoodsRequest.GoodsUpdateRequest;
 import com.musinsa.snap.outfit.interfaces.api.goods.dto.GoodsResponse.GoodsCreateResponse;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
 
 @Tag(name = "상품 API", description = "상품 관련 API")
 public interface GoodsControllerDocs {
@@ -52,9 +54,7 @@ public interface GoodsControllerDocs {
                     }
                     """))),
     })
-    ApiSuccessResponse<GoodsListResponse> getGoodsList(
-        @Parameter(description = "페이지 번호 (0부터 시작)") int pageNo,
-        @Parameter(description = "페이지 크기") int pageSize);
+    ApiSuccessResponse<GoodsListResponse> getGoodsList(@ParameterObject GetGoodsListRequest request);
 
     @Operation(summary = "상품 상세 조회", description = "특정 상품의 상세 정보를 조회합니다.")
     @ApiResponses(value = {
