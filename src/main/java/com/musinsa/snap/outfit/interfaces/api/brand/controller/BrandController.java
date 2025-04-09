@@ -11,7 +11,7 @@ import com.musinsa.snap.outfit.domain.brand.dto.CreateBrandCommand;
 import com.musinsa.snap.outfit.domain.brand.dto.GetBrandListQuery;
 import com.musinsa.snap.outfit.domain.brand.dto.UpdateBrandCommand;
 import com.musinsa.snap.outfit.domain.brand.model.Brand;
-import com.musinsa.snap.outfit.domain.common.PageResult;
+import com.musinsa.snap.outfit.domain.common.model.PageResult;
 import com.musinsa.snap.outfit.interfaces.api.brand.dto.BrandRequest.CreateBrandRequest;
 import com.musinsa.snap.outfit.interfaces.api.brand.dto.BrandRequest.GetBrandListRequest;
 import com.musinsa.snap.outfit.interfaces.api.brand.dto.BrandRequest.UpdateBrandRequest;

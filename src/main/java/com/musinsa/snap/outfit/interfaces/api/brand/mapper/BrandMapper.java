@@ -1,6 +1,6 @@
 package com.musinsa.snap.outfit.interfaces.api.brand.mapper;
 
-import com.musinsa.snap.outfit.domain.common.PageResult;
+import com.musinsa.snap.outfit.domain.common.model.PageResult;
 import com.musinsa.snap.outfit.domain.brand.dto.CreateBrandCommand;
 import com.musinsa.snap.outfit.domain.brand.dto.GetBrandListQuery;
 import com.musinsa.snap.outfit.domain.brand.dto.UpdateBrandCommand;

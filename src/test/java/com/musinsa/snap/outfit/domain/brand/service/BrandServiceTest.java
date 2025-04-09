@@ -33,7 +33,7 @@ class BrandServiceTest {
 
     @Test
     @DisplayName("브랜드 생성 시, 이미 존재하는 브랜드명이 아니면 저장하고 반환한다.")
-    void should_SaveAndReturndBrand_when_givenCommand() {
+    void should_SaveAndReturnBrand_when_givenCommand() {
         // given
         String brandName = "brandName";
         CreateBrandCommand command = new CreateBrandCommand(brandName);
@@ -176,7 +176,7 @@ class BrandServiceTest {
         brandService.deleteBrand(brandId);
 
         // then
-        assertThat(existingBrand.deleted).isTrue();
+        assertThat(existingBrand.isDeleted()).isTrue();
     }
 
     @DisplayName("브랜드 조회 시, 존재하지 않는 ID면 예외가 발생한다.")

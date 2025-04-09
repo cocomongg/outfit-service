@@ -32,9 +32,11 @@ create table goods
     goods_id    bigint auto_increment
         primary key,
     goods_name  varchar(200)   not null,
-    price       decimal(10, 2) not null,
+    price       bigint         not null,
+    quantity    bigint         not null,
     brand_id    bigint         not null,
     category_id bigint         not null,
+    is_deleted  boolean        not null,
     created_at  datetime       not null,
     updated_at  datetime       null
 );

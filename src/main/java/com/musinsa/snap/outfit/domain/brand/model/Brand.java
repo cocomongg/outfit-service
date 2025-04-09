@@ -1,6 +1,6 @@
 package com.musinsa.snap.outfit.domain.brand.model;
 
-import com.musinsa.snap.outfit.domain.common.BaseEntity;
+import com.musinsa.snap.outfit.domain.common.model.BaseEntity;
 import com.musinsa.snap.outfit.domain.brand.dto.CreateBrandCommand;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,13 +19,13 @@ public class Brand extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "brand_id")
-    public Long brandId;
+    private Long brandId;
 
     @Column(name = "brand_name")
-    public String brandName;
+    private String brandName;
 
     @Column(name = "is_deleted")
-    public boolean deleted;
+    private boolean deleted;
 
     public Brand(CreateBrandCommand command) {
         this.brandName = command.getBrandName();

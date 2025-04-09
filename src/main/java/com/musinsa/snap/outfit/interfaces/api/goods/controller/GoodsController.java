@@ -1,17 +1,28 @@
 package com.musinsa.snap.outfit.interfaces.api.goods.controller;
 
-import com.musinsa.snap.outfit.interfaces.api.brand.dto.BrandResponse.BrandInfo;
-import com.musinsa.snap.outfit.interfaces.api.category.dto.CategoryResponse.CategoryInfo;
+import static com.musinsa.snap.outfit.interfaces.api.goods.dto.GoodsRequest.GetGoodsListRequest;
+
+import com.musinsa.snap.outfit.application.goods.dto.GoodsDetailResult;
+import com.musinsa.snap.outfit.application.goods.usecase.CreateGoodsUseCase;
+import com.musinsa.snap.outfit.application.goods.usecase.DeleteGoodsUseCase;
+import com.musinsa.snap.outfit.application.goods.usecase.GetGoodsDetailUseCase;
+import com.musinsa.snap.outfit.application.goods.usecase.GetGoodsListUseCase;
+import com.musinsa.snap.outfit.application.goods.usecase.UpdateGoodsUseCase;
+import com.musinsa.snap.outfit.domain.common.model.PageResult;
+import com.musinsa.snap.outfit.domain.goods.dto.CreateGoodsCommand;
+import com.musinsa.snap.outfit.domain.goods.dto.GetGoodsListQuery;
+import com.musinsa.snap.outfit.domain.goods.dto.GoodsWithBrand;
+import com.musinsa.snap.outfit.domain.goods.dto.UpdateGoodsCommand;
+import com.musinsa.snap.outfit.domain.goods.model.Goods;
 import com.musinsa.snap.outfit.interfaces.api.common.response.ApiSuccessResponse;
 import com.musinsa.snap.outfit.interfaces.api.goods.dto.GoodsRequest.GoodsCreateRequest;
 import com.musinsa.snap.outfit.interfaces.api.goods.dto.GoodsRequest.GoodsUpdateRequest;
 import com.musinsa.snap.outfit.interfaces.api.goods.dto.GoodsResponse.GoodsCreateResponse;
 import com.musinsa.snap.outfit.interfaces.api.goods.dto.GoodsResponse.GoodsDetailResponse;
-import com.musinsa.snap.outfit.interfaces.api.goods.dto.GoodsResponse.GoodsInfo;
 import com.musinsa.snap.outfit.interfaces.api.goods.dto.GoodsResponse.GoodsListResponse;
+import com.musinsa.snap.outfit.interfaces.api.goods.mapper.GoodsMapper;
 import jakarta.validation.Valid;
-import java.time.LocalDateTime;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,44 +30,47 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/goods")
 @RestController
 public class GoodsController implements GoodsControllerDocs {
 
+    private final CreateGoodsUseCase createGoodsUseCase;
+    private final UpdateGoodsUseCase updateGoodsUseCase;
+    private final GetGoodsDetailUseCase getGoodsDetailUseCase;
+    private final GetGoodsListUseCase getGoodsListUseCase;
+    private final DeleteGoodsUseCase deleteGoodsUseCase;
+
+    private final GoodsMapper goodsMapper;
+
     @Override
     @PostMapping
     public ApiSuccessResponse<GoodsCreateResponse> createGoods(@Valid @RequestBody GoodsCreateRequest request) {
-        GoodsCreateResponse response = new GoodsCreateResponse(1L);
+        CreateGoodsCommand command = goodsMapper.toCreateGoodsCommand(request);
+        Goods goods = createGoodsUseCase.execute(command);
+        GoodsCreateResponse response = goodsMapper.toCreateGoodsResponse(goods);
+
         return ApiSuccessResponse.CREATED(response);
     }
 
     @Override
     @GetMapping
-    public ApiSuccessResponse<GoodsListResponse> getGoodsList(
-        @RequestParam(defaultValue = "0") int pageNo,
-        @RequestParam(defaultValue = "10") int pageSize) {
-        GoodsInfo goodsInfo1 = new GoodsInfo(1L, "상의1", 10000L);
-        GoodsInfo goodsInfo2 = new GoodsInfo(2L, "아우터1", 10000L);
+    public ApiSuccessResponse<GoodsListResponse> getGoodsList(@Valid GetGoodsListRequest request) {
+        GetGoodsListQuery query = goodsMapper.toGetGoodsListQuery(request);
+        PageResult<GoodsWithBrand> result = getGoodsListUseCase.execute(query);
+        GoodsListResponse response = goodsMapper.toGoodsListResponse(result);
 
-        GoodsListResponse response = new GoodsListResponse(pageNo, pageSize, 2L, 1,
-            List.of(goodsInfo1, goodsInfo2));
         return ApiSuccessResponse.OK(response);
     }
 
     @Override
     @GetMapping("/{goodsId}")
     public ApiSuccessResponse<GoodsDetailResponse> getGoodsDetail(@PathVariable Long goodsId) {
-        GoodsDetailResponse response = new GoodsDetailResponse(
-            goodsId,
-            "상의1",
-            10000L,        // 요청값에서 가격을 사용한다고 가정
-            LocalDateTime.now(),
-            new BrandInfo(1L, "A"),
-            new CategoryInfo("001", "상의")
-        );
+        GoodsDetailResult result = getGoodsDetailUseCase.execute(goodsId);
+        GoodsDetailResponse response = goodsMapper.toGoodsDetailResponse(result);
+
         return ApiSuccessResponse.OK(response);
     }
 
@@ -64,20 +78,20 @@ public class GoodsController implements GoodsControllerDocs {
     @PutMapping("/{goodsId}")
     public ApiSuccessResponse<GoodsDetailResponse> updateGoods(@PathVariable Long goodsId,
         @Valid @RequestBody GoodsUpdateRequest request) {
-        GoodsDetailResponse response = new GoodsDetailResponse(
-            goodsId,
-            request.getGoodsName(),
-            request.getPrice(),
-            LocalDateTime.now(),
-            new BrandInfo(1L, "A"),
-            new CategoryInfo("001", "상의")
-        );
+        UpdateGoodsCommand command = goodsMapper.toUpdateGoodsCommand(goodsId, request);
+        Goods goods = updateGoodsUseCase.execute(command);
+
+        GoodsDetailResult result = getGoodsDetailUseCase.execute(goods.getGoodsId());
+        GoodsDetailResponse response = goodsMapper.toGoodsDetailResponse(result);
+
         return ApiSuccessResponse.OK(response);
     }
 
     @Override
     @DeleteMapping("/{goodsId}")
     public ApiSuccessResponse<?> deleteGoods(@PathVariable Long goodsId) {
+        deleteGoodsUseCase.execute(goodsId);
+
         return ApiSuccessResponse.OK();
     }
 }
