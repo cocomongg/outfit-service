@@ -1,4 +1,4 @@
-INSERT INTO category (category_code, category_name, created_at) VALUES
+INSERT INTO categories (category_code, category_name, created_at) VALUES
     ('001', '상의', '2025-04-07 09:00:00'),
     ('002', '아우터', '2025-04-07 09:00:00'),
     ('003', '바지', '2025-04-07 09:00:00'),
