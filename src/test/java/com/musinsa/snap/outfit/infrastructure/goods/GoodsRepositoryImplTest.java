@@ -8,6 +8,7 @@ import com.musinsa.snap.outfit.domain.brand.model.Brand;
 import com.musinsa.snap.outfit.domain.common.model.PageResult;
 import com.musinsa.snap.outfit.domain.goods.dto.CreateGoodsCommand;
 import com.musinsa.snap.outfit.domain.goods.dto.GetGoodsListQuery;
+import com.musinsa.snap.outfit.domain.goods.dto.GoodsPriceInfo;
 import com.musinsa.snap.outfit.domain.goods.dto.GoodsWithBrand;
 import com.musinsa.snap.outfit.domain.goods.model.Goods;
 import com.musinsa.snap.outfit.domain.goods.repository.GoodsRepository;
@@ -237,6 +238,45 @@ class GoodsRepositoryImplTest {
         assertThat(getGoods.getQuantity()).isEqualTo(command.getQuantity());
         assertThat(getGoods.getBrandId()).isEqualTo(command.getBrandId());
         assertThat(getGoods.getCategoryId()).isEqualTo(command.getCategoryId());
+    }
+
+    @DisplayName("최저 및 최고 가격 정보를 조회한다.")
+    @Test
+    void should_returnExtremePriceInfoByCategory() {
+        // given
+        Long brandId = this.createBrand();
+        Long categoryId = 1L;
+        Long lowestPrice = 1000L;
+        Long highestPrice = 2000L;
+
+        Goods lowestGoods1 = this.createGoods("goods1", lowestPrice, brandId, categoryId);
+        Goods lowestGoods2 = this.createGoods("goods2", lowestPrice, brandId, categoryId);
+        Goods normalGoods = this.createGoods("goods3", 1500L, brandId, categoryId);
+        Goods highestGoods1 = this.createGoods("goods4", highestPrice, brandId, categoryId);
+        Goods highestGoods2 = this.createGoods("goods5", highestPrice, brandId, categoryId);
+
+        // when
+        List<GoodsPriceInfo> lowestList =
+            goodsRepository.getExtremePriceInfoByCategory(categoryId, true);
+        List<GoodsPriceInfo> highestList =
+            goodsRepository.getExtremePriceInfoByCategory(categoryId, false);
+
+        // then
+        assertThat(lowestList).hasSize(2);
+        lowestList.forEach(info ->
+            assertThat(info.getPrice()).isEqualTo(lowestPrice)
+        );
+
+        assertThat(highestList).isNotEmpty();
+        highestList.forEach(info ->
+            assertThat(info.getPrice()).isEqualTo(highestPrice)
+        );
+    }
+
+    private Goods createGoods(String goodsName, long price, Long brandId, Long categoryId) {
+        CreateGoodsCommand command = new CreateGoodsCommand(goodsName, price, 10L, brandId, categoryId);
+        Goods goods = new Goods(command);
+        return goodsJpaRepository.save(goods);
     }
 
     private Long createBrand() {
