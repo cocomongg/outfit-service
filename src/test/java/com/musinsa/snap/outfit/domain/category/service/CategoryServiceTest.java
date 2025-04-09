@@ -27,20 +27,20 @@ class CategoryServiceTest {
 
     @DisplayName("카테고리 조회 시, 존재하지 않는 카테고리 ID를 입력하면 CoreException이 발생한다.")
     @Test
-    void getCategoryNotFoundTest() {
+    void getCategoryCategoryNotFoundTest() {
         // Given
         Long categoryId = 1L;
 
         // When & Then
         CoreException coreException = assertThrows(CoreException.class,
-            () -> categoryService.get(categoryId));
+            () -> categoryService.getCategory(categoryId));
         assertThat(coreException.getCoreErrorCode())
             .isEqualTo(CategoryErrorCode.CATEGORY_NOT_FOUND);
     }
 
     @DisplayName("카테고리 조회 시, 존재하는 카테고리 ID를 입력하면 해당 카테고리를 반환한다.")
     @Test
-    void getCategoryFoundTest() {
+    void getCategoryCategoryFoundTest() {
         // Given
         Long categoryId = 1L;
         Category category = new Category("code", "name");
@@ -48,7 +48,7 @@ class CategoryServiceTest {
             .thenReturn(Optional.of(category));
 
         // When
-        Category result = categoryService.get(categoryId);
+        Category result = categoryService.getCategory(categoryId);
 
         // Then
        assertThat(result.getCategoryCode()).isEqualTo(category.getCategoryCode());
