@@ -31,6 +31,27 @@ public interface GoodsControllerDocs {
                         "message": "유효하지 않은 값입니다."
                     }
                     """))),
+        @ApiResponse(responseCode = "400", description = "상품 이름 중복",
+            content = @Content(mediaType = "application/json", examples = @ExampleObject(value = """
+                    {
+                        "code": "GOODS_NAME_ALREADY_EXISTS",
+                        "message": "상품 이름이 이미 존재합니다."
+                    }
+                    """))),
+        @ApiResponse(responseCode = "404", description = "브랜드를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = @ExampleObject(value = """
+                    {
+                        "code": "BRAND_NOT_FOUND",
+                        "message": "브랜드를 찾을 수 없습니다."
+                    }
+                    """))),
+        @ApiResponse(responseCode = "404", description = "카테고리를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = @ExampleObject(value = """
+                    {
+                        "code": "BRAND_NOT_FOUND",
+                        "message": "카테고리를 찾을 수 없습니다."
+                    }
+                    """))),
         @ApiResponse(responseCode = "500", description = "Internal server error",
             content = @Content(mediaType = "application/json", examples = @ExampleObject(value = """
                     {
@@ -87,6 +108,27 @@ public interface GoodsControllerDocs {
                     {
                         "code": "INVALID_REQUEST",
                         "message": "유효하지 않은 값입니다."
+                    }
+                    """))),
+        @ApiResponse(responseCode = "400", description = "상품 이름 중복",
+            content = @Content(mediaType = "application/json", examples = @ExampleObject(value = """
+                    {
+                        "code": "GOODS_NAME_ALREADY_EXISTS",
+                        "message": "상품 이름이 이미 존재합니다."
+                    }
+                    """))),
+        @ApiResponse(responseCode = "404", description = "브랜드를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = @ExampleObject(value = """
+                    {
+                        "code": "BRAND_NOT_FOUND",
+                        "message": "브랜드를 찾을 수 없습니다."
+                    }
+                    """))),
+        @ApiResponse(responseCode = "404", description = "카테고리를 찾을 수 없음",
+            content = @Content(mediaType = "application/json", examples = @ExampleObject(value = """
+                    {
+                        "code": "BRAND_NOT_FOUND",
+                        "message": "카테고리를 찾을 수 없습니다."
                     }
                     """))),
         @ApiResponse(responseCode = "404", description = "상품을 찾을 수 없음",

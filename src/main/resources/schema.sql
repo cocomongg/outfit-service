@@ -40,3 +40,6 @@ create table goods
     created_at  datetime       not null,
     updated_at  datetime       null
 );
+
+create index goods_category_id_is_deleted_price_index
+    on goods (category_id, is_deleted, price)

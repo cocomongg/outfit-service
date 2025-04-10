@@ -265,6 +265,13 @@
   }
 }
 ```
+- 실패 - 브랜드 이름이 이미 존재(http status: 400 Bad Request)
+```json
+{
+  "code": "BRAND_NAME_ALREADY_EXISTS",
+  "message": "브랜드 이름이 이미 존재합니다."
+}
+```
 <br/>
 
 #### 브랜드 목록 조회 API
@@ -378,6 +385,13 @@
   }
 }
 ```
+- 실패 - 브랜드 이름이 이미 존재(http status: 400 Bad Request)
+```json
+{
+  "code": "BRAND_NAME_ALREADY_EXISTS",
+  "message": "브랜드 이름이 이미 존재합니다."
+}
+```
 <br/>
 
 #### 브랜드 삭제 API
@@ -479,6 +493,27 @@
   "message": "유효하지 않은 값입니다."
 }
 ```
+- 실패 - 상품 이름이 이미 존재(http status: 400 Bad Request)
+```json
+{
+  "code": "GOODS_NAME_ALREADY_EXISTS",
+  "message": "상품 이름이 이미 존재합니다."
+}
+```
+- 실패 - 브랜드를 찾을 수 없음(http status: 404 Not Found
+```json
+{
+  "code": "BRAND_NOT_FOUND",
+  "message": "브랜드를 찾을 수 없습니다."
+}
+```
+- 실패 - 카테고리를 찾을 수 없음(http status: 404 Not Found
+```json
+{
+  "code": "CATEGORY_NOT_FOUND",
+  "message": "카테고리를 찾을 수 없습니다."
+}
+```
 <br/>
 
 #### 상품 목록 조회 API
@@ -565,6 +600,20 @@
   "message": "상품을 찾을 수 없습니다."
 }
 ```
+- 실패 - 브랜드를 찾을 수 없음(http status: 404 Not Found
+```json
+{
+  "code": "BRAND_NOT_FOUND",
+  "message": "브랜드를 찾을 수 없습니다."
+}
+```
+- 실패 - 카테고리를 찾을 수 없음(http status: 404 Not Found
+```json
+{
+  "code": "CATEGORY_NOT_FOUND",
+  "message": "카테고리를 찾을 수 없습니다."
+}
+```
 
 <br/>
 
@@ -617,11 +666,32 @@
   "message": "유효하지 않은 요청입니다."
 }
 ```  
+- 실패 - 상품 이름이 이미 존재(http status: 400 Bad Request)
+```json
+{
+  "code": "GOODS_NAME_ALREADY_EXISTS",
+  "message": "상품 이름이 이미 존재합니다."
+}
+```
 - 상품 미존재 (HTTP 상태 코드: 404 Not Found)
 ```json
 {
   "code": "GOODS_NOT_FOUND",
   "message": "상품을 찾을 수 없습니다."
+}
+```
+- 실패 - 브랜드를 찾을 수 없음(http status: 404 Not Found
+```json
+{
+  "code": "BRAND_NOT_FOUND",
+  "message": "브랜드를 찾을 수 없습니다."
+}
+```
+- 실패 - 카테고리를 찾을 수 없음(http status: 404 Not Found
+```json
+{
+  "code": "CATEGORY_NOT_FOUND",
+  "message": "카테고리를 찾을 수 없습니다."
 }
 ```
 <br/>

@@ -32,6 +32,13 @@ public interface BrandControllerDocs {
                         "message": "유효하지 않은 값입니다."
                     }
                     """))),
+        @ApiResponse(responseCode = "400", description = "브랜드 이름 중복",
+            content = @Content(mediaType = "application/json", examples = @ExampleObject(value = """
+                    {
+                        "code": "BRAND_NAME_ALREADY_EXISTS",
+                        "message": "브랜드 이름이 이미 존재합니다."
+                    }
+                    """))),
         @ApiResponse(responseCode = "500", description = "Internal server error",
             content = @Content(mediaType = "application/json", examples = @ExampleObject(value = """
                     {
@@ -81,6 +88,13 @@ public interface BrandControllerDocs {
                     {
                         "code": "INVALID_REQUEST",
                         "message": "유효하지 않은 값입니다."
+                    }
+                    """))),
+        @ApiResponse(responseCode = "400", description = "브랜드 이름 중복",
+            content = @Content(mediaType = "application/json", examples = @ExampleObject(value = """
+                    {
+                        "code": "BRAND_NAME_ALREADY_EXISTS",
+                        "message": "브랜드 이름이 이미 존재합니다."
                     }
                     """))),
         @ApiResponse(responseCode = "404", description = "브랜드를 찾을 수 없음",

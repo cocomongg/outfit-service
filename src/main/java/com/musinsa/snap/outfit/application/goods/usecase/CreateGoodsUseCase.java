@@ -9,6 +9,7 @@ import com.musinsa.snap.outfit.domain.goods.model.Goods;
 import com.musinsa.snap.outfit.domain.goods.service.GoodsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Component
@@ -18,6 +19,7 @@ public class CreateGoodsUseCase {
     private final BrandService brandService;
     private final CategoryService categoryService;
 
+    @Transactional
     public Goods execute(CreateGoodsCommand command) {
         Brand brand = brandService.getBrand(command.getBrandId());
         Category category = categoryService.getCategory(command.getCategoryId());

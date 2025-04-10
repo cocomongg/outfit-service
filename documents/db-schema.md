@@ -7,6 +7,7 @@ erDiagram
     BRAND {
         bigint brand_id PK
         varchar brand_name UK
+        boolean is_deleted
         datetime created_at
         datetime updated_at
     }
@@ -22,9 +23,11 @@ erDiagram
     GOODS {
         bigint goods_id PK
         varchar goods_name
-        decimal price
+        bigint price
+        bigint quantity
         bigint brand_id
         varchar category_id
+        boolean is_deleted
         datetime created_at
         datetime updated_at
     }
@@ -37,6 +40,9 @@ erDiagram
 테이블명: BRAND (브랜드 정보 저장)
 - brand_id(PK): 브랜드 고유 식별자
 - brand_name(UK): 브랜드 명 (중복 방지를 위한 유니크 제약)
+- is_deleted: 삭제 여부 (true/false)
+  - 브랜드가 삭제된 경우 true, 그렇지 않은 경우 false
+  - 브랜드가 삭제된 경우에도 브랜드 정보는 유지되며, is_deleted 컬럼을 통해 삭제 여부를 확인할 수 있습니다.
 - created_at: 생성일시
 - updated_at: 수정일시
 <br/><br/>
@@ -53,8 +59,12 @@ erDiagram
 - goods_id(PK): 상품 고유 식별자
 - goods_name: 상품 명
 - price: 상품 가격
+- quantity: 상품 수량
 - brand_id: BRAND.brand_id
 - category_id: CATEGORY.category_id 참조
+- is_deleted: 삭제 여부 (true/false)
+  - 상품이 삭제된 경우 true, 그렇지 않은 경우 false
+  - 상품이 삭제된 경우에도 상품 정보는 유지되며, is_deleted 컬럼을 통해 삭제 여부를 확인할 수 있습니다.
 - created_at: 생성일시
 - updated_at: 수정일시
 <br/><br/>
@@ -101,6 +111,7 @@ create table brand
     brand_id   bigint auto_increment comment '브랜드 pk'
         primary key,
     brand_name varchar(100) not null comment '브랜드 명',
+    is_deleted boolean      not null comment '삭제 여부',
     created_at datetime     not null comment '생성일시',
     updated_at datetime     null comment '수정일시',
     constraint brand_name_uindex
@@ -114,9 +125,11 @@ create table goods
     goods_id    bigint auto_increment comment '상품 pk'
         primary key,
     goods_name  varchar(200)   not null comment '상품 명',
-    price       decimal(10, 2) not null comment '상품 가격',
+    price       bigint         not null comment '상품 가격',
+    quantity    bigint         not null comment '상품 수량',
     brand_id    bigint         not null comment '브랜드 pk',
     category_id bigint         not null comment '카테고리 pk',
+    is_deleted  boolean        not null comment '삭제 여부',
     created_at  datetime       not null comment '생성일시',
     updated_at  datetime       null comment '수정일시'
 )
