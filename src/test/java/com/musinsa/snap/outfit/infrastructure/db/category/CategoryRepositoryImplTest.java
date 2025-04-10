@@ -53,4 +53,35 @@ class CategoryRepositoryImplTest {
         // then
         assertThat(result.isPresent()).isFalse();
     }
+
+    @DisplayName("존재하는 카테고리 이름으로 조회 시, 해당 카테고리를 반환한다.")
+    @Test
+    void should_returnCategory_when_categoryNameExists() {
+        // given
+        Category category = new Category("code", "name");
+        Category savedCategory = categoryJpaRepository.save(category);
+
+        // when
+        Optional<Category> result = categoryRepository.get(category.getCategoryName());
+
+        // then
+        assertThat(result.isPresent()).isTrue();
+        Category resultCategory = result.get();
+        assertThat(resultCategory.getCategoryId()).isEqualTo(savedCategory.getCategoryId());
+        assertThat(resultCategory.getCategoryCode()).isEqualTo(savedCategory.getCategoryCode());
+        assertThat(resultCategory.getCategoryName()).isEqualTo(savedCategory.getCategoryName());
+    }
+
+    @DisplayName("존재하지 않는 카테고리 이름으로 조회 시, 빈 Optional을 반환한다.")
+    @Test
+    void should_returnEmptyOptional_when_categoryNameNotExists() {
+        // given
+        String nonExistentCategoryName = "nonExistentCategory";
+
+        // when
+        Optional<Category> result = categoryRepository.get(nonExistentCategoryName);
+
+        // then
+        assertThat(result.isPresent()).isFalse();
+    }
 }
